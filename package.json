@@ -1,0 +1,14 @@
+{
+    "name": "starter-node-angular",
+    "main": "server.js",
+    "dependencies": {
+        "express": "latest",
+        "express-validator": "latest",
+        "mongoose": "latest",
+        "body-parser": "latest",
+        "method-override": "latest",
+        "morgan": "latest",
+        "jsonwebtoken": "latest",
+        "bcrypt": "latest"
+    }
+}
