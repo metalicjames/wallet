@@ -9,7 +9,7 @@ function($routeProvider, $locationProvider) {
             controller: 'MainController'
         })
 
-        .when('/users', {
+        .when('/users/:user_id', {
             templateUrl: 'views/user.html',
             controller: 'UserController'
         })

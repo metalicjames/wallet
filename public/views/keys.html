@@ -1,0 +1,12 @@
+<button class="btn pull-left" ng-click="newKey()">New Keypair</button>
+<br><br>
+<table class="table-striped">
+    <tr>
+        <th>Label</th>
+        <th>Public Key</th>
+    </tr>
+    <tr ng-repeat="key in keys">
+        <td>{{ key.label }}</td>
+        <td>{{ key.publicKey }}</td>
+    </tr>
+</table>

@@ -8,6 +8,10 @@ var authUser = require('../middleware/authUser');
 
 var User = require('../models/user');
 
+var keys = require('./keys');
+
+router.use('/:user_id/keys', keys);
+
 router.get('/', auth, function(req, res) {
     User.find({}, function(err, users){
         res.json(users);

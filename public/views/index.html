@@ -13,6 +13,7 @@
     <!-- JS -->
     <script src="libs/angular/angular.min.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="libs/elliptic/dist/elliptic.min.js"></script>
 
     <!-- ANGULAR CUSTOM -->
     <script src="js/controllers/MainCtrl.js"></script>
@@ -33,7 +34,6 @@
 
         <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
         <ul class="nav navbar-nav">
-            <li><a href="/users">Users</a></li>
             <li ng-hide="auth.isAuthed()"><a href="/login">Log In</a></li>
             <li ng-show="auth.isAuthed()" ng-click="auth.logout()">
                 <a href="#">Log Out</a>

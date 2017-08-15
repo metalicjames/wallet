@@ -1,9 +1,8 @@
-angular.module('UserCtrl', []).controller('UserController', function($scope, User) {
-
-    $scope.tagline = 'Nothing beats a pocket protector!';
+angular.module('UserCtrl', []).controller('UserController', 
+                                          function($scope, User, $routeParams) {
+    $scope.keys = User.getKeys($routeParams.user_id);
     
-    User.get();
-
+    $scope.newKey = User.newKey($routeParams.user_id, 'test');
 })
 
 .controller('LoginController', function($scope, $http, API, 
@@ -17,7 +16,7 @@ angular.module('UserCtrl', []).controller('UserController', function($scope, Use
         var callback = function(res) {
             $scope.message = res.data.message;
             if(res.data.success) {
-                $location.path("/users");
+                $location.path("/");
             }
         };
         

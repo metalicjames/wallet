@@ -1,9 +1,8 @@
-// grab the mongoose module
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// define our nerd model
-// module.exports allows us to pass this to other files when it is called
+var Key = require('./key');
+
 module.exports = mongoose.model('User', new Schema({
     name: {
         type: String,
@@ -20,5 +19,6 @@ module.exports = mongoose.model('User', new Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
+    keys: [Key]
 }));

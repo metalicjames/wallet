@@ -4,7 +4,7 @@ angular.module('AuthService', [])
     return {
         // automatically attach Authorization header
         request: function(config) {
-            var token = auth.getToken();
+            var token = auth.getRawToken();
             if(config.url.indexOf(API) === 0 && token) {
                 config.headers['x-access-token'] = token;
             }
@@ -52,12 +52,16 @@ angular.module('AuthService', [])
         $location.path("/");
     };
 
-    this.getToken = function() {
+    this.getRawToken = function() {
         return $window.localStorage['jwtToken'];
     };
+    
+    this.getToken = function() {
+        return this.parseJwt(this.getRawToken());
+    }; 
 
     this.isAuthed = function() {
-        var token = this.getToken();
+        var token = this.getRawToken();
         if(token) {
             var params = this.parseJwt(token);
             return Math.round(new Date().getTime() / 1000) <= params.exp;
