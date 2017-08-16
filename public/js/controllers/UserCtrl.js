@@ -1,8 +1,25 @@
 angular.module('UserCtrl', []).controller('UserController', 
                                           function($scope, User, $routeParams) {
-    $scope.keys = User.getKeys($routeParams.user_id);
     
-    $scope.newKey = User.newKey($routeParams.user_id, 'test');
+    $scope.key = {};            
+    User.getKeys($routeParams.user_id).then(function(res) {
+        $scope.keys = res.data.keys;
+    });
+    
+    $scope.newKey = function() {
+                        User.newKey($routeParams.user_id, 
+                                    $scope.key.label,
+                                    $scope.key.password)
+                            .then(function(res) {
+                                    $scope.message = res.data.message;
+                                    if(res.data.success) {
+                                        User.getKeys($routeParams.user_id).then(
+                                        function(res) {
+                                            $scope.keys = res.data.keys;
+                                        });                                 
+                                    }
+                                  });
+                    };
 })
 
 .controller('LoginController', function($scope, $http, API, 

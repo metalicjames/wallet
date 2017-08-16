@@ -1,25 +1,22 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-module.exports = Schema({
+module.exports = {
     cipherText: {
-        type: Buffer,
+        type: String,
         required: true
     },
     iv: {
-        type: Buffer,
+        type: String,
         required: true
     },
     salt: {
-        type: Buffer,
+        type: String,
         required: true
     },
     publicKey: {
-        type: Buffer,
+        type: String,
         required: true
     },
     label: {
         type: String,
         required: true
     }
-});
+};

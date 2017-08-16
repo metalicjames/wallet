@@ -20,5 +20,5 @@ module.exports = mongoose.model('User', new Schema({
         required: true,
         default: false
     },
-    keys: [Key]
+    keys: [Schema(Key)]
 }));

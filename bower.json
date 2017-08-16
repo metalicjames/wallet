@@ -8,7 +8,8 @@
         "angular": "latest",
         "angular-route": "latest",
         "crypto-js": "latest",
-        "elliptic": "https://github.com/indutny/elliptic.git#master"
+        "elliptic": "https://github.com/indutny/elliptic.git#master",
+        "base64-js": "latest"
     }
 }
  

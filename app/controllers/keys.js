@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router({mergeParams: true});
 
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
 var auth = require('../middleware/auth');
 var authUser = require('../middleware/authUser');
 
@@ -58,7 +61,7 @@ router.post('/', auth, authUser, function(req, res) {
                 }
             }
             
-            var keyPair = new KeyPair();
+            var keyPair = new Schema(KeyPair);
             keyPair.label = req.body.label;
             keyPair.cipherText = req.body.cipherText;
             keyPair.iv = req.body.iv;
