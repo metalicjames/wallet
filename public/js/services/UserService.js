@@ -1,14 +1,21 @@
 angular.module('UserService', [])
 
-.factory('User', function($http, $q, $cookies) {
-
+.factory('User', function($http, $q, $cookies, coin) {
     return {
         get: function(id) {
             return $http.get('/api/users/' + id);
         },
         
         getKeys: function(id) {
-            return $http.get('/api/users/' + id + '/keys');
+            return $http.get('/api/users/' + id + '/keys').then(function(res) {
+                var keys = res.data.keys;
+                for(var i in keys) {
+                    keys[i].publicKey = 
+                    coin.pubkeyToAddress(keys[i].publicKey);
+                }
+                
+                return keys;
+            });
         },
 
         create: function(userData) {
@@ -19,17 +26,7 @@ angular.module('UserService', [])
             var gen = function() {
                 var defer = $q.defer();
                 
-                var ec = new elliptic.ec('secp256k1');
-                
-                var key = ec.genKeyPair();
-                
-                // Pubkey in form z||x||y where z is 0x04
-                var pubPoint = key.getPublic().encode();
-                
-                var base64PubPoint = base64js.fromByteArray(pubPoint);
-                
-                var privateKey = key.getPrivate().toArray();
-                var base64PrivateKey = base64js.fromByteArray(privateKey);
+                var keypair = coin.genKeyPair();
                 
                 var pbkdf = CryptoJS.algo.PBKDF2.create({ keySize: 8,
                                                           iterations: 100000,
@@ -41,12 +38,12 @@ angular.module('UserService', [])
                                                            
                 var iv = CryptoJS.lib.WordArray.random(16);
                
-                var cipherText = CryptoJS.AES.encrypt(base64PrivateKey, 
+                var cipherText = CryptoJS.AES.encrypt(keypair.priv, 
                                                       encKey, 
                                                       { iv: iv });
                 var keyData = {
                     label: label,
-                    publicKey: base64PubPoint,
+                    publicKey: keypair.pub,
                     cipherText: CryptoJS.enc.Base64
                                         .stringify(cipherText.ciphertext),
                     iv: CryptoJS.enc.Base64.stringify(iv),

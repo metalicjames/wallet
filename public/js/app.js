@@ -1,2 +1,3 @@
 angular.module('sampleApp', ['ngRoute', 'ngCookies', 'appRoutes', 'MainCtrl', 
-                             'UserCtrl', 'UserService', 'AuthService']);
+                             'UserCtrl', 'UserService', 'AuthService', 
+                             'CoinService']);

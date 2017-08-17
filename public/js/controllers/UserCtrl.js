@@ -1,34 +1,30 @@
 angular.module('UserCtrl', []).controller('UserController', 
                                           function($scope, User, 
-                                                   $routeParams, $q) {
+                                                   $routeParams, $q, coin) {
     
-    $scope.key = {};            
-    User.getKeys($routeParams.user_id).then(function(res) {
-        $scope.keys = res.data.keys;
-    });
+    $scope.key = {};   
+
+    $scope.updateKeys = function() {
+        User.getKeys($routeParams.user_id).then(function(res) {
+            $scope.keys = res;
+        });
+    };
+         
+    $scope.updateKeys();
     
     $scope.newKey = function() {
-                        var defer = $q.defer();
-                        User.newKey($routeParams.user_id, 
-                                $scope.key.label)
-                        .then(function(res) {
-                                if(res.data.message) {
-                                    $scope.message = res.data.message
-                                                        .join('<br>');
-                                }
-                                if(res.data.success) {
-                                    User.getKeys($routeParams.user_id).then(
-                                    function(res) {
-                                        $scope.keys = res.data.keys;
-                                    });
-                                    defer.resolve('Key generated');
-                                } else {
-                                    defer.reject('Failed to generate key');
-                                }
-                              });
-                              
-                        return defer.promise;
-                    };
+        User.newKey($routeParams.user_id, 
+                    $scope.key.label)
+        .then(function(res) {
+            if(res.data.message) {
+                $scope.message = res.data.message
+                                    .join('<br>');
+            }
+            if(res.data.success) {
+                $scope.updateKeys();
+            }
+        });
+    };
 })
 
 .controller('LoginController', function($scope, $http, API, 
