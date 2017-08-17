@@ -1,2 +1,2 @@
-angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'UserCtrl', 'UserService', 
-                             'AuthService']);
+angular.module('sampleApp', ['ngRoute', 'ngCookies', 'appRoutes', 'MainCtrl', 
+                             'UserCtrl', 'UserService', 'AuthService']);

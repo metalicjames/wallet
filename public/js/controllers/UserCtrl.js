@@ -10,8 +10,7 @@ angular.module('UserCtrl', []).controller('UserController',
     $scope.newKey = function() {
                         var defer = $q.defer();
                         User.newKey($routeParams.user_id, 
-                                $scope.key.label,
-                                $scope.key.password)
+                                $scope.key.label)
                         .then(function(res) {
                                 if(res.data.message) {
                                     $scope.message = res.data.message
@@ -33,7 +32,7 @@ angular.module('UserCtrl', []).controller('UserController',
 })
 
 .controller('LoginController', function($scope, $http, API, 
-                                        User, $location, auth) {
+                                        User, $location, auth, $cookies) {
     if(auth.isAuthed()) {
         $location.path("/");
     }
@@ -43,6 +42,9 @@ angular.module('UserCtrl', []).controller('UserController',
         var callback = function(res) {
             $scope.message = res.data.message;
             if(res.data.success) {
+                var expiry = new Date();
+                expiry.setDate(expiry.getDate() + (1.0/48));
+                $cookies.put('password', $scope.password, {expiry: expiry});
                 $location.path("/");
             }
         };

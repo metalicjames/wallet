@@ -1,6 +1,6 @@
 angular.module('UserService', [])
 
-.factory('User', function($http, $q) {
+.factory('User', function($http, $q, $cookies) {
 
     return {
         get: function(id) {
@@ -15,7 +15,7 @@ angular.module('UserService', [])
             return $http.post('/api/users', userData);
         },
 
-        newKey: function(id, label, password) {
+        newKey: function(id, label) {
             var gen = function() {
                 var defer = $q.defer();
                 
@@ -36,7 +36,7 @@ angular.module('UserService', [])
                                                           hasher: 
                                                           CryptoJS.algo.SHA256});
                 var salt = CryptoJS.lib.WordArray.random(32);
-                var encKey = pbkdf.compute(password, salt);                                    
+                var encKey = pbkdf.compute($cookies.get('password'), salt);                                    
                                                            
                 var iv = CryptoJS.lib.WordArray.random(16);
                

@@ -23,10 +23,10 @@ angular.module('AuthService', [])
             if(res.status == 401) {
                 if(auth.isAuthed()) {
                     // Disallowed resource
-                    $location.url('/');
+                    $location.path('/');
                 } else {
                     // Token expired/logged out
-                    $location.url('/login');
+                    $location.path('/login');
                 }
                 return;
             }
@@ -36,7 +36,7 @@ angular.module('AuthService', [])
     }
 })
 
-.service('auth', function($window, $location) {
+.service('auth', function($window, $location, $cookies) {
     this.parseJwt = function(token) {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace('-', '+').replace('_', '/');
@@ -44,16 +44,19 @@ angular.module('AuthService', [])
     };
 
     this.saveToken = function(token) {
-        $window.localStorage['jwtToken'] = token;
+        var expiry = new Date();
+        expiry.setDate(expiry.getDate() + (1.0/48));
+        $cookies.put('jwtToken', token, {expires: expiry});
     };
 
     this.logout = function() {
-        $window.localStorage.removeItem('jwtToken');
+        $cookies.remove('jwtToken');
+        $cookies.remove('password');
         $location.path("/");
     };
 
     this.getRawToken = function() {
-        return $window.localStorage['jwtToken'];
+        return $cookies.get('jwtToken');
     };
     
     this.getToken = function() {
