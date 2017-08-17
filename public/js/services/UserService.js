@@ -34,7 +34,8 @@ angular.module('UserService', [])
                 var pbkdf = CryptoJS.algo.PBKDF2.create({ keySize: 8,
                                                           iterations: 100000,
                                                           hasher: 
-                                                          CryptoJS.algo.SHA256});
+                                                          CryptoJS.algo.SHA256
+                                                        });
                 var salt = CryptoJS.lib.WordArray.random(32);
                 var encKey = pbkdf.compute($cookies.get('password'), salt);                                    
                                                            
@@ -46,7 +47,8 @@ angular.module('UserService', [])
                 var keyData = {
                     label: label,
                     publicKey: base64PubPoint,
-                    cipherText: CryptoJS.enc.Base64.stringify(cipherText.ciphertext),
+                    cipherText: CryptoJS.enc.Base64
+                                        .stringify(cipherText.ciphertext),
                     iv: CryptoJS.enc.Base64.stringify(iv),
                     salt: CryptoJS.enc.Base64.stringify(salt)
                 };
