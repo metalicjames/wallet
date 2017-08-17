@@ -88,13 +88,15 @@ router.put('/:user_id', auth, authUser, function(req, res) {
                 errs.push(errors.array()[i]["msg"]);
             }
             return res.json({success: false,
-                             message: errs.join('/n')
+                             message: errs
                             });
         }
         
         User.findById(req.params.user_id, function(err, user) {
            if(err) {
-               return res.send(err);
+               return res.json({success: false,
+                                message: err
+                               });
            }
            
            pw.cryptPassword(req.body.password, function(err, hash) {
@@ -125,7 +127,9 @@ router.put('/:user_id', auth, authUser, function(req, res) {
 router.get('/:user_id', auth, authUser, function(req, res) {
     User.findById(req.params.user_id, function(err, user) {
        if(err) {
-           return res.send(err);
+           return res.json({success: false,
+                            message: err
+                           });
        }
        
        res.json(user);

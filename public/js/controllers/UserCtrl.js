@@ -1,5 +1,6 @@
 angular.module('UserCtrl', []).controller('UserController', 
-                                          function($scope, User, $routeParams) {
+                                          function($scope, User, 
+                                                   $routeParams, $q) {
     
     $scope.key = {};            
     User.getKeys($routeParams.user_id).then(function(res) {
@@ -7,18 +8,27 @@ angular.module('UserCtrl', []).controller('UserController',
     });
     
     $scope.newKey = function() {
+                        var defer = $q.defer();
                         User.newKey($routeParams.user_id, 
-                                    $scope.key.label,
-                                    $scope.key.password)
-                            .then(function(res) {
-                                    $scope.message = res.data.message;
-                                    if(res.data.success) {
-                                        User.getKeys($routeParams.user_id).then(
-                                        function(res) {
-                                            $scope.keys = res.data.keys;
-                                        });                                 
-                                    }
-                                  });
+                                $scope.key.label,
+                                $scope.key.password)
+                        .then(function(res) {
+                                if(res.data.message) {
+                                    $scope.message = res.data.message
+                                                        .join('<br>');
+                                }
+                                if(res.data.success) {
+                                    User.getKeys($routeParams.user_id).then(
+                                    function(res) {
+                                        $scope.keys = res.data.keys;
+                                    });
+                                    defer.resolve('Key generated');
+                                } else {
+                                    defer.reject('Failed to generate key');
+                                }
+                              });
+                              
+                        return defer.promise;
                     };
 })
 
@@ -39,7 +49,7 @@ angular.module('UserCtrl', []).controller('UserController',
         
         return $http.post(API + '/authenticate', {
             name: $scope.username,
-            password: $scope.password
+            password: CryptoJS.SHA3($scope.password).toString()
         }).then(callback, callback);
     };
     
@@ -54,7 +64,7 @@ angular.module('UserCtrl', []).controller('UserController',
         
         return User.create({
             name: $scope.username,
-            password: $scope.password
+            password: CryptoJS.SHA3($scope.password).toString()
         }).then(callback, callback);
     };
 });
