@@ -21,6 +21,36 @@ angular.module('UserService', [])
         create: function(userData) {
             return $http.post('/api/users', userData);
         },
+        
+        getBalance: function(id) {
+            var defer = $q.defer();
+            
+            this.getKeys(id).then(function(keys) {                
+                var total = 0;
+
+                for(var i in keys) {
+                    var process = function(curr) {
+                        $http.get('/api/blockchain/txos/' + keys[curr].publicKey).then(function(res) {
+                            if(res.data.txos) {                            
+                                for(var j in res.data.txos) {
+                                    if(!res.data.txos[j].spent) {
+                                        total += res.data.txos[j].value;
+                                    }
+                                }
+                            }
+                            
+                            if(curr == keys.length - 1) {
+                                defer.resolve(total);
+                            }
+                        });
+                    };
+                    
+                    process(i);
+                }
+            });
+            
+            return defer.promise;
+        },
 
         newKey: function(id, label) {
             var gen = function() {

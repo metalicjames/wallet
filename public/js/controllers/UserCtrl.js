@@ -2,8 +2,16 @@ angular.module('UserCtrl', []).controller('UserController',
                                           function($scope, User, 
                                                    $routeParams, $q, coin) {
     
-    $scope.key = {};   
+    $scope.key = {};  
 
+    $scope.updateBalance = function() {
+        User.getBalance($routeParams.user_id).then(function(res) {
+            $scope.balance = res / 100000000.0;
+        });
+    }; 
+    
+    $scope.updateBalance();
+    
     $scope.updateKeys = function() {
         User.getKeys($routeParams.user_id).then(function(res) {
             $scope.keys = res;
