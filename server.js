@@ -49,8 +49,10 @@ app.use(morgan('dev'));
 var users = require('./app/controllers/users');
 var root = require('./app/controllers/root');
 var www = require('./app/controllers/www');
+var blockchain = require('./app/controllers/blockchain')
 
 app.use('/api/users', users);
+app.use('/api/blockchain', blockchain);
 app.use('/api', root);
 app.use('/', www);
 
