@@ -10,11 +10,10 @@ var client = rpc.Client.$create(8383,
                                 config.ckuser, 
                                 config.ckpassword);
 
-router.get('/txos/:pubkey', function(req, res) {
+router.post('/txos', function(req, res) {
     client.call('getpubkeyoutputs', 
-                {"publickey": req.params.pubkey},
+                {"publickey": req.body.pubkey},
                 function(err, rpcRes) {
-
         if(err) {
             res.json({success: false,
                       message: err});
@@ -23,6 +22,40 @@ router.get('/txos/:pubkey', function(req, res) {
         
         res.json({success: true,
                   txos: rpcRes});
+    });
+});
+
+router.post('/util/getoutputsetid', function(req, res) {
+    client.call('getoutputsetid',
+                {"outputs": req.body.outputs},
+                function(err, rpcRes) {
+        if(err) {
+            res.json({success: false,
+                      message: err
+                    });
+            return;
+        }
+        
+        res.json({success: true,
+                  id: rpcRes
+                 });
+    });
+});
+
+router.post('/util/sendrawtransaction', function(req, res) {
+    client.call('sendrawtransaction',
+                {"transaction": req.body.tx},
+                function(err, rpcRes) {
+        if(err) {
+            res.json({success: false,
+                      message: err
+                    });
+            return;
+        }
+        
+        res.json({success: true,
+                  result: rpcRes
+                 });
     });
 });
 

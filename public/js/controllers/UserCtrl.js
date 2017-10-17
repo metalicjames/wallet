@@ -3,6 +3,7 @@ angular.module('UserCtrl', []).controller('UserController',
                                                    $routeParams, $q, coin) {
     
     $scope.key = {};  
+    $scope.send = {};
 
     $scope.updateBalance = function() {
         User.getBalance($routeParams.user_id).then(function(res) {
@@ -21,6 +22,7 @@ angular.module('UserCtrl', []).controller('UserController',
     $scope.updateKeys();
     
     $scope.newKey = function() {
+        $scope.message = "Generating...";
         User.newKey($routeParams.user_id, 
                     $scope.key.label)
         .then(function(res) {
@@ -31,6 +33,32 @@ angular.module('UserCtrl', []).controller('UserController',
             if(res.data.success) {
                 $scope.updateKeys();
             }
+            $scope.message = "Done";
+        });
+    };
+    
+    $scope.sendToAddress = function() {
+        $scope.message = "Sending...";
+        User.getUtxos($routeParams.user_id).then(function(utxos) {
+            User.getNewKey($routeParams.user_id, "change " + Date.now()).then(
+                function(changeAddr) {
+                    $scope.updateKeys();
+                    User.getKeys($routeParams.user_id).then(function(keys) {
+                        coin.sendToAddress($scope.send.address, 
+                           $scope.send.amount * 100000000, 
+                           utxos, 
+                           changeAddr.publicKey,
+                           keys,
+                           function(err, res) {
+                                if(err) {
+                                   $scope.message = err; 
+                                } else {
+                                   $scope.message = "Sent";
+                                }
+                        });
+                    });
+                }
+            )
         });
     };
 })
