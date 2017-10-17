@@ -1,3 +1,3 @@
-angular.module('sampleApp', ['ngRoute', 'ngCookies', 'appRoutes', 'MainCtrl', 
+angular.module('ckwallet', ['ngRoute', 'ngCookies', 'appRoutes', 'MainCtrl', 
                              'UserCtrl', 'UserService', 'AuthService', 
                              'CoinService']);
