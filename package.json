@@ -1,5 +1,5 @@
 {
-    "name": "starter-node-angular",
+    "name": "ck-webwallet",
     "main": "server.js",
     "dependencies": {
         "express": "latest",

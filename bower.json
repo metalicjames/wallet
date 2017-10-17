@@ -1,5 +1,5 @@
 {
-    "name": "starter-node-angular",
+    "name": "ck-webwallet",
     "version": "1.0.0",
     "dependencies": {
         "bootstrap": "latest",
