@@ -11,11 +11,15 @@ angular.module('UserCtrl', []).controller('UserController',
         });
     }; 
     
-    $scope.updateBalance();
-    
     $scope.updateKeys = function() {
         User.getKeys($routeParams.user_id).then(function(res) {
             $scope.keys = res;
+            $scope.updateBalance();
+            if($scope.keys.length < 1) {
+                $scope.key.label = "default";
+                $scope.newKey();
+                $scope.key.label = "";
+            }
         });
     };
          
