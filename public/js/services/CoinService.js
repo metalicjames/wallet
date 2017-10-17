@@ -80,13 +80,15 @@ angular.module('CoinService', [])
         
         var outputs = [];
         
-        outputs.push({
-            data: {
-                publicKey: changeAddr
-            },
-            nonce: Math.floor((Math.random() * 100000000) + 1),
-            value: accumulator - amount - fee
-        });
+        if(accumulator - amount - fee > 0) {
+            outputs.push({
+                data: {
+                    publicKey: changeAddr
+                },
+                nonce: Math.floor((Math.random() * 100000000) + 1),
+                value: accumulator - amount - fee
+            });
+        }
         
         outputs.push({
             data: {
